@@ -30,6 +30,8 @@ except:
     seconds = 0
 rtc.datetime(utime.localtime(seconds))
 
+led = machine.Pin(9, machine.Pin.OUT)
+
 def time():
     body = """<html>
 <body>
@@ -46,9 +48,23 @@ def dummy():
 
     return response_template % body
 
+def light_on():
+    led.value(1)
+    body = "Light has been turned on"
+
+    return response_template % body
+
+def light_off():
+    led.value(0)
+    body = "Light has been turned off"
+
+    return response_template % body
+
 handlers = {
     'time': time,
     'dummy': dummy,
+    'light_on': light_on,
+    'light_off': light_off,
 }
 
 def main():
