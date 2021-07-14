@@ -31,6 +31,8 @@ except:
 rtc.datetime(utime.localtime(seconds))
 
 led = machine.Pin(9, machine.Pin.OUT)
+switch_gpio = machine.Pin(10, machine.Pin.IN)
+adc = machine.ADC(0)
 
 def time():
     body = """<html>
@@ -60,11 +62,24 @@ def light_off():
 
     return response_template % body
 
+def switch():
+    values = {0: 'Off', 1: 'On'}
+    body = "The switch is {}".format(values[switch_gpio.value()])
+
+    return response_template % body
+
+def light():
+    body = "{value: " + str(adc.read()) + "}"
+
+    return response_template % body
+
 handlers = {
     'time': time,
     'dummy': dummy,
     'light_on': light_on,
     'light_off': light_off,
+    'switch': switch,
+    'light': light,
 }
 
 def main():
